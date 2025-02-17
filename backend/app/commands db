@@ -1,0 +1,11 @@
+flask --app backend/app db init
+
+flask --app backend/app db migrate -m "Initial migration"
+
+flask --app backend/app db upgrade
+
+Remove-Item -Recurse -Force migrations
+
+ngrok http 5000
+
+npx expo start
