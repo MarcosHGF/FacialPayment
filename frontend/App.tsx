@@ -1,19 +1,31 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
 import HomeScreen from './HomeScreen';
 import RegisterScreen from './RegisterScreen';
-import { RootStackParamList } from './types'; // Importe os tipos
+import LoginScreen from './LoginScreen';
+import MainScreen from './MainScreen';
+
+type RootStackParamList = {
+  Register: undefined;
+  Login: undefined;
+  Home: undefined;
+  Main: { user: { id: number; username: string; email: string } };
+};
 
 const Stack = createStackNavigator<RootStackParamList>();
 
-export default function App() {
+const AppNavigator: React.FC = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Facial Payment App' }} />
-        <Stack.Screen name="Register" component={RegisterScreen} options={{ title: 'Register User' }} />
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Register" component={RegisterScreen} />
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Main" component={MainScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
+
+export default AppNavigator;

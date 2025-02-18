@@ -2,6 +2,7 @@
 from flask import request, jsonify, Blueprint
 from sqlalchemy import select
 from app.models import User, Transaction, db
+from werkzeug.security import check_password_hash
 import numpy as np
 import base64
 import cv2 # type: ignore
@@ -32,6 +33,31 @@ def register_user():
     db.session.commit()
 
     return jsonify({"message": "User registered successfully", "user_id": new_user.id}), 201
+
+@bp.route('/login', methods=['POST'])
+def login_user():
+    data = request.json
+    email = data.get('email')
+    password = data.get('password')
+
+    if not email or not password:
+        return jsonify({"message": "Email and password are required"}), 400
+
+    # Find the user by email
+    user = User.query.filter_by(email=email).first()
+
+    if not user or not check_password_hash(user.password_hash, password):
+        return jsonify({"message": "Invalid email or password"}), 401
+
+    # Return user details on successful login
+    return jsonify({
+        "message": "Login successful",
+        "user": {
+            "id": user.id,
+            "username": user.username,
+            "email": user.email
+        }
+    }), 200
 
 # Endpoint para fazer upload de uma imagem e gerar o embedding facial
 @bp.route('/upload-face/<int:user_id>', methods=['POST'])

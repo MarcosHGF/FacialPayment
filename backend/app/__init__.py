@@ -2,7 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from app.extension import db
 from app.routes import bp
-from flask_migrate import Migrate
+from flask_migrate import Migrate # type: ignore
 
 def create_app():
 
